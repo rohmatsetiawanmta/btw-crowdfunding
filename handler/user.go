@@ -21,6 +21,7 @@ func NewUserHandler(userService user.Service, authService auth.Service) *userHan
 	return &userHandler{userService, authService}
 }
 
+// /api/v1/users
 func (h *userHandler) RegisterUser(c *gin.Context) {
 	var input user.RegisterUserInput
 
@@ -54,6 +55,7 @@ func (h *userHandler) RegisterUser(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// /api/v1/sessions
 func (h *userHandler) Login(c *gin.Context) {
 	var input user.LoginInput
 
@@ -89,6 +91,7 @@ func (h *userHandler) Login(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// /api/v1/email-checkers
 func (h *userHandler) CheckEmailAvailability(c *gin.Context) {
 	var input user.CheckEmailInput
 
@@ -125,6 +128,7 @@ func (h *userHandler) CheckEmailAvailability(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// /api/v1/avatars
 func (h *userHandler) UploadAvatar(c *gin.Context) {
 	file, err := c.FormFile("avatar")
 	if err != nil {
