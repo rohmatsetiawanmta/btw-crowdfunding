@@ -21,6 +21,12 @@ func NewCampaignHandler(service campaign.Service) *campaignHandler {
 func (h *campaignHandler) GetCampaigns(c *gin.Context) {
 	userID, _ := strconv.Atoi(c.Query("user_id"))
 
+	if userID == 0 && c.Query("user_id") != "" {
+		response := helper.APIResponse("User ID must be an integer", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
 	campaigns, err := h.service.GetCampaigns(userID)
 	if err != nil {
 		response := helper.APIResponse("Get campaigns error", http.StatusBadRequest, "error", nil)
