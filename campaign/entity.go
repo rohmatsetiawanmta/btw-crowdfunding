@@ -4,7 +4,7 @@ import "time"
 
 type Campaign struct {
 	ID               int
-	UserID           string
+	UserID           int
 	Name             string
 	ShortDescription string
 	Description      string
