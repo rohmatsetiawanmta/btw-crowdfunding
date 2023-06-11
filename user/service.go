@@ -23,18 +23,18 @@ func NewService(repository Repository) *service {
 }
 
 func (s *service) RegisterUser(input RegisterUserInput) (User, error) {
-	user := User{}
-	user.Name = input.Name
-	user.Occupation = input.Occupation
-	user.Email = input.Email
+	user := User{
+		Name:       input.Name,
+		Occupation: input.Occupation,
+		Email:      input.Email,
+		Role:       "user",
+	}
 
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.MinCost)
 	if err != nil {
 		return user, err
 	}
-
 	user.PasswordHash = string(passwordHash)
-	user.Role = "user"
 
 	newUser, err := s.repository.Save(user)
 	if err != nil {
