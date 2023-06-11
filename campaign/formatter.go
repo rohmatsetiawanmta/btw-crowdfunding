@@ -1,7 +1,6 @@
 package campaign
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -17,7 +16,6 @@ type CampaignFormatter struct {
 }
 
 func FormatCampaign(campaign Campaign) CampaignFormatter {
-	fmt.Println(campaign)
 	campaignFormatter := CampaignFormatter{
 		ID:               campaign.ID,
 		Name:             campaign.Name,
