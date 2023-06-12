@@ -9,13 +9,12 @@ type UserFormatter struct {
 }
 
 func FormatUser(user User, token string) UserFormatter {
-	formatter := UserFormatter{
-		ID:         user.ID,
-		Name:       user.Name,
-		Occupation: user.Occupation,
-		Email:      user.Email,
-		Token:      token,
-	}
+	formatter := UserFormatter{}
+	formatter.ID = user.ID
+	formatter.Name = user.Name
+	formatter.Occupation = user.Occupation
+	formatter.Email = user.Email
+	formatter.Token = token
 
 	return formatter
 }

@@ -71,21 +71,16 @@ type CampaignImageFormatter struct {
 }
 
 func FormatCampaignDetail(campaign Campaign) CampaignDetailFormatter {
-	// if campaign.ID == 0 {
-	// 	return nil
-	// }
-
-	campaignDetailFormatter := CampaignDetailFormatter{
-		ID:               campaign.ID,
-		Name:             campaign.Name,
-		ShortDescription: campaign.ShortDescription,
-		ImageURL:         "",
-		GoalAmount:       campaign.GoalAmount,
-		CurrentAmount:    campaign.CurrentAmount,
-		UserID:           campaign.UserID,
-		Slug:             campaign.Slug,
-		Description:      campaign.Description,
-	}
+	campaignDetailFormatter := CampaignDetailFormatter{}
+	campaignDetailFormatter.ID = campaign.ID
+	campaignDetailFormatter.Name = campaign.Name
+	campaignDetailFormatter.ShortDescription = campaign.ShortDescription
+	campaignDetailFormatter.ImageURL = ""
+	campaignDetailFormatter.GoalAmount = campaign.GoalAmount
+	campaignDetailFormatter.CurrentAmount = campaign.CurrentAmount
+	campaignDetailFormatter.UserID = campaign.UserID
+	campaignDetailFormatter.Slug = campaign.Slug
+	campaignDetailFormatter.Description = campaign.Description
 
 	var perks []string
 	for _, perk := range strings.Split(campaign.Perks, ",") {
@@ -94,18 +89,17 @@ func FormatCampaignDetail(campaign Campaign) CampaignDetailFormatter {
 	campaignDetailFormatter.Perks = perks
 
 	user := campaign.User
-	campaignUserFormatter := CampaignUserFormatter{
-		Name:     user.Name,
-		ImageURL: user.AvatarFileName,
-	}
+	campaignUserFormatter := CampaignUserFormatter{}
+	campaignUserFormatter.Name = user.Name
+	campaignUserFormatter.ImageURL = user.AvatarFileName
+
 	campaignDetailFormatter.User = campaignUserFormatter
 
 	images := []CampaignImageFormatter{}
 	for _, image := range campaign.CampaignImages {
-		campaignImageFormatter := CampaignImageFormatter{
-			ImageURL:  image.FileName,
-			IsPrimary: false,
-		}
+		campaignImageFormatter := CampaignImageFormatter{}
+		campaignImageFormatter.ImageURL = image.FileName
+		campaignImageFormatter.IsPrimary = false
 
 		if image.IsPrimary == 1 {
 			campaignImageFormatter.IsPrimary = true
