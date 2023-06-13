@@ -22,7 +22,7 @@ func (h *transactionHandler) GetCampaignTransactions(c *gin.Context) {
 
 	err := c.ShouldBindUri(&input)
 	if err != nil {
-		response := helper.APIResponse("Get campaign transactions error", http.StatusBadRequest, "error", nil)
+		response := helper.APIResponse("Get campaign transactions failed", http.StatusBadRequest, "error", nil)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
@@ -32,7 +32,7 @@ func (h *transactionHandler) GetCampaignTransactions(c *gin.Context) {
 
 	transactions, err := h.service.GetTransactionsByCampaignID(input)
 	if err != nil {
-		response := helper.APIResponse("Get campaign transactions error", http.StatusBadRequest, "error", nil)
+		response := helper.APIResponse("Get campaign transactions failed", http.StatusBadRequest, "error", nil)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
@@ -46,11 +46,38 @@ func (h *transactionHandler) GetUserTransactions(c *gin.Context) {
 
 	transactions, err := h.service.GetTransactionsByUserID(currentUser.ID)
 	if err != nil {
-		response := helper.APIResponse("Get user transactions error", http.StatusBadRequest, "error", nil)
+		response := helper.APIResponse("Get user transactions failed", http.StatusBadRequest, "error", nil)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
 
 	response := helper.APIResponse("Get user transactions success", http.StatusOK, "success", transaction.FormatUserTransactions(transactions))
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *transactionHandler) CreateTransaction(c *gin.Context) {
+	var input transaction.CreateTransactionInput
+
+	err := c.ShouldBindJSON(&input)
+	if err != nil {
+		errors := helper.FormatValidationError(err)
+		errorMessage := gin.H{"errors": errors}
+
+		response := helper.APIResponse("Create transaction failed", http.StatusUnprocessableEntity, "error", errorMessage)
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
+	}
+
+	currentUser := c.MustGet("currentUser").(user.User)
+	input.User = currentUser
+
+	newTransaction, err := h.service.CreateTransaction(input)
+	if err != nil {
+		response := helper.APIResponse("Create transaction failed", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("Create transaction success", http.StatusOK, "success", transaction.FormatTransaction(newTransaction))
 	c.JSON(http.StatusOK, response)
 }
